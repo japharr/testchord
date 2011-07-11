@@ -55,6 +55,7 @@ public class NodeTest {
 			}
 			node=sucNode;
 		}while(node!=minNode);
+		node1.showDatas();
 	}
 
 	@Test
@@ -71,72 +72,77 @@ public class NodeTest {
 		Node node4=new Node("node4");
 		node4.join(node1);
 		assertEquals(node4, node1.findSuccessor(node4.getIdentify()));
+		System.out.println();
+		node1.showDatas();
 		Node node5=new Node("node5");
 		node5.join(node1);
+		System.out.println();
+		node1.showDatas();
 		assertEquals(node5, node1.findSuccessor(node5.getIdentify()));
 		Node node6=new Node("node6");
 		node6.join(node1);
 		assertEquals(node6, node1.findSuccessor(node6.getIdentify()));
 	}
+//
+//	@Test
+//	public void testAddData() {
+//		Node node1=new Node("node1");
+//		node1.join();
+//		Node node2=new Node("node2");
+//		node2.join(node1);
+//		Node node3=new Node("node3");
+//		node3.join(node1);
+//		Node node4=new Node("node4");
+//		node4.join(node1);
+//		Node node5=new Node("node5");
+//		node5.join(node1);
+//		Node node6=new Node("node6");
+//		node6.join(node1);
+//		for(int i=0;i<30;i++)
+//			node1.addData("test"+i, "data"+i);
+//		Node node=node1;
+//		do{
+//			Map<Identify,DataEntry> map=node.getStore();
+//			for(Identify id:map.keySet()){
+//				assertTrue(Identify.isIdBetween(id, node.getPrecessor().getIdentify(), node.getIdentify()));
+//			}
+//			node=node.getSuccessor();
+//		}while(node!=node1);
+//		
+//	}
 
-	@Test
-	public void testAddData() {
-		Node node1=new Node("node1");
-		node1.join();
-		Node node2=new Node("node2");
-		node2.join(node1);
-		Node node3=new Node("node3");
-		node3.join(node1);
-		Node node4=new Node("node4");
-		node4.join(node1);
-		Node node5=new Node("node5");
-		node5.join(node1);
-		Node node6=new Node("node6");
-		node6.join(node1);
-		for(int i=0;i<30;i++)
-			node1.addData("test"+i, "data"+i);
-		Node node=node1;
-		do{
-			Map<Identify,DataEntry> map=node.getStore();
-			for(Identify id:map.keySet()){
-				assertTrue(Identify.isIdBetween(id, node.getPrecessor().getIdentify(), node.getIdentify()));
-			}
-			node=node.getSuccessor();
-		}while(node!=node1);
-		
-	}
 
 
-
-	@Test
-	public void testGetChargeDataWithJoin() {
-		Node node1=new Node("node1");
-		node1.join();
-		Node node2=new Node("node2");
-		node2.join(node1);
-		Node node3=new Node("node3");
-		node3.join(node1);
-		Node node4=new Node("node4");
-		node4.join(node1);
-		Node node5=new Node("node5");
-		node5.join(node1);
-		Node node6=new Node("node6");
-		node6.join(node1);
-		for(int i=0;i<30;i++)
-			node1.addData("test"+i, "data"+i);
-		for(int i=7;i<30;i++){
-			Node node=new Node("node"+i);
-			node.join(node1);
-		}
-		Node node=node1;
-		do{
-			Map<Identify,DataEntry> map=node.getStore();
-			for(Identify id:map.keySet()){
-				assertTrue(Identify.isIdBetween(id, node.getPrecessor().getIdentify(), node.getIdentify()));
-			}
-			node=node.getSuccessor();
-		}while(node!=node1);
-	}
+//	@Test
+//	public void testGetChargeDataWithJoin() {
+//		Node node1=new Node("node1");
+//		node1.join();
+//		Node node2=new Node("node2");
+//		node2.join(node1);
+//		Node node3=new Node("node3");
+//		node3.join(node1);
+//		Node node4=new Node("node4");
+//		node4.join(node1);
+//		Node node5=new Node("node5");
+//		node5.join(node1);
+//		Node node6=new Node("node6");
+//		node6.join(node1);
+//		for(int i=0;i<30;i++)
+//			node1.addData("test"+i, "data"+i);
+////		for(int i=7;i<30;i++){
+////			Node node=new Node("node"+i);
+////			node.join(node1);
+////		}
+//		Node node=node1;
+//		do{
+//			Map<Identify,DataEntry> map=node.getStore();
+//			for(Identify id:map.keySet()){
+//				assertTrue(Identify.isIdBetween(id, node.getPrecessor().getIdentify(), node.getIdentify()));
+//			}
+//			node=node.getSuccessor();
+//		}while(node!=node1);
+//		node2.showDatas();
+//	}
 
 
 	@Test
@@ -153,20 +159,47 @@ public class NodeTest {
 		node5.join(node1);
 		Node node6=new Node("node6");
 		node6.join(node1);
-		for(int i=0;i<30;i++)
-			node1.addData("test"+i, "data"+i);
+//		for(int i=0;i<30;i++)
+//			node1.addData("test"+i, "data"+i);
 		node3.leaf();
 		node4.leaf();
 		node5.leaf();
 		node6.leaf();
-		Node node=node1;
-		do{
-			Map<Identify,DataEntry> map=node.getStore();
-			for(Identify id:map.keySet()){
-				assertTrue(Identify.isIdBetween(id, node.getPrecessor().getIdentify(), node.getIdentify()));
-			}
-			node=node.getSuccessor();
-		}while(node!=node1);
+//		Node node=node1;
+//		do{
+//			Map<Identify,DataEntry> map=node.getStore();
+//			for(Identify id:map.keySet()){
+//				assertTrue(Identify.isIdBetween(id, node.getPrecessor().getIdentify(), node.getIdentify()));
+//			}
+//			node=node.getSuccessor();
+//		}while(node!=node1);
 	}
+	
+	
+	@Test
+	public void testfull(){
+		
+		Node node1=new Node(getId((byte) 0));
+		node1.join();
+		for(int i=1;i<=0xff;i+=1){
+			Node node=new Node(getId((byte)(i&0xff)));
+			node.join(node1);
+//			System.out.println("================================================================");
+//			node1.showDatas();
+		}
+		node1=null;
+		node1=new Node(getId((byte)0xff));
+		node1.join();
+		for(int i=0xfe;i>=0;i--){
+			Node node=new Node(getId((byte)(i&0xff)));
+			node.join(node1);
+		}
+	}
+	
+	
+	private Identify getId(byte i) {
+		return new Identify(new byte[]{i});
+	}
+
 
 }
