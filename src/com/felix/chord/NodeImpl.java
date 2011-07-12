@@ -7,47 +7,44 @@ import java.util.List;
 
 import com.felix.util.Identify;
 
-public class NodeImpl implements Node{
-	private final Identify id;
-	private final String name;
+public class NodeImpl extends AbstractNode implements Node{
 	private Node successor;
 	private Node precessor;
 
 //	private Map<Identify, DataEntry> store = new HashMap<Identify, DataEntry>();
+
 	
+	private final Node selfReference;
 	private final Node[] routeTable;
 	private final int routeTableSize;
 	
-	@Override
-	public String getName() {
-		return name;
-	}
 	
 	public NodeImpl(String name) {
-		this.name = name;
-		this.id = Identify.getIdentify(name);
-		this.routeTableSize=this.id.getLength();
-		this.routeTable=new Node[routeTableSize];
+		this(name, Identify.getIdentify(name));
 	}
 	
 	public NodeImpl(Identify id){
-		this.name=id.toString();
-		this.id=id;
-		this.routeTableSize=id.getLength();
-		this.routeTable=new Node[routeTableSize];
+		this(id.toString(), id);
 	}
 
+	public NodeImpl(String name,Identify id){
+		super(name, id);
+		this.routeTableSize=this.getIdentify().getLength();
+		this.routeTable=new Node[routeTableSize];
+		this.selfReference=new SelfReference(this);
+	}
+	
 	// public Node(Identify id) {
 	// this.id = id;
 	// }
 
 	public Node findSuccessor(Identify key) {
 		// 没有successor 只有他一个节点
-		if (successor == this) {
+		if (successor == selfReference) {
 			return this;
 		}
 
-		if (Identify.isIdBetween(key,this.id, successor.getIdentify())) {
+		if (Identify.isIdBetween(key,this.getIdentify(), successor.getIdentify())) {
 			return successor;
 		} else {
 			Node routeNode=closestPrecedingNode(key);
@@ -59,7 +56,7 @@ public class NodeImpl implements Node{
 	private Node closestPrecedingNode(Identify key) {
 		for(int i=routeTableSize-1;i>=0;i--){
 			Node route=routeTable[i];
-			if(route!=null&&Identify.isIdBetween(route.getIdentify(), this.id, key)&&(!route.getIdentify().equals(key))){
+			if(route!=null&&Identify.isIdBetween(route.getIdentify(), this.getIdentify(), key)&&(!route.getIdentify().equals(key))){
 				return route;
 			}
 		}
@@ -87,14 +84,10 @@ public class NodeImpl implements Node{
 		return precessor;
 	}
 
-	public Identify getIdentify() {
-		return id;
-	}
-
 	public void join(Node nodeOnCycle) {
 		if (this.successor != null && this.precessor != null)
 			throw new IllegalStateException();
-		Node s = nodeOnCycle.findSuccessor(id);
+		Node s = nodeOnCycle.findSuccessor(this.getIdentify());
 		
 		this.successor = s;
 		this.precessor = s.getPrecessor();
@@ -122,9 +115,9 @@ public class NodeImpl implements Node{
 //	}
 
 	public void join() {
-		this.successor = this;
-		this.precessor = this;
-		routeTable[routeTableSize-1]=this;
+		this.successor = selfReference;
+		this.precessor = selfReference;
+		routeTable[routeTableSize-1]=selfReference;
 	}
 
 	public void leaf() {
@@ -145,12 +138,12 @@ public class NodeImpl implements Node{
 
 	
 	void buildRouteMap(Node nodeOnCycle){
-		int i=Identify.getDistenceLog(nodeOnCycle.getIdentify(), this.id);
+		int i=Identify.getDistenceLog(nodeOnCycle.getIdentify(), this.getIdentify());
 		routeTable[i]=nodeOnCycle;
 		int j=i+1;
 		while(j<routeTableSize){
-			Node nextRoute=nodeOnCycle.findSuccessor(this.id.plusPow2(j));
-			int dis=Identify.getDistenceLog(nextRoute.getIdentify(), this.id);
+			Node nextRoute=nodeOnCycle.findSuccessor(this.getIdentify().plusPow2(j));
+			int dis=Identify.getDistenceLog(nextRoute.getIdentify(), this.getIdentify());
 			if(dis==-1)
 				break;
 			routeTable[dis]=nextRoute;
@@ -173,12 +166,12 @@ public class NodeImpl implements Node{
 	}
 	
 	public void updateRouteTable(Node node) {
-		int dis=Identify.getDistenceLog(node.getIdentify(), this.id);
+		int dis=Identify.getDistenceLog(node.getIdentify(), this.getIdentify());
 		if(dis==-1) return;
 		if(routeTable[dis]==null){
 			routeTable[dis]=node;
 		}
-		else if(Identify.isIdBetween(node.getIdentify(), this.id, routeTable[dis].getIdentify())){
+		else if(Identify.isIdBetween(node.getIdentify(), this.getIdentify(), routeTable[dis].getIdentify())){
 			routeTable[dis]=node;
 		}
 		precessor.updateRouteTable(node);
@@ -236,5 +229,61 @@ public class NodeImpl implements Node{
 		return Collections.unmodifiableList(Arrays.asList(this.routeTable));
 	}
 
+	
+	
+	private static class SelfReference extends AbstractNode implements Node{
+
+		final NodeImpl impl;
+		public SelfReference(NodeImpl impl) {
+			super(impl.getName(), impl.getIdentify());
+			this.impl=impl;
+		}
+
+		@Override
+		public void addPrecessor(Node precessor) {
+			impl.addPrecessor(precessor);
+		}
+
+		@Override
+		public void addSuccessor(Node successor) {
+			impl.addSuccessor(successor);
+			
+		}
+
+		@Override
+		public Node findSuccessor(Identify key) {
+			return impl.findSuccessor(key);
+		}
+
+		@Override
+		public Node getPrecessor() {
+			return impl.getPrecessor();
+		}
+
+		@Override
+		public Node getSuccessor() {
+			return impl.getSuccessor();
+		}
+
+		@Override
+		public void join(Node nodeOnCycle) {
+			impl.join(nodeOnCycle);
+		}
+
+		@Override
+		public void updateRouteTable(Node node) {
+			impl.updateRouteTable(node);
+		}
+
+		@Override
+		public List<Node> getRouteTable() {
+			return impl.getRouteTable();
+		}
+		@Override
+		public void join() {
+			impl.join();
+		}
+		
+	}
 
 }
