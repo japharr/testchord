@@ -1,5 +1,6 @@
 package com.felix.chordtest;
 
+import com.felix.chord.ChordNode;
 import com.felix.chord.Node;
 import com.felix.chord.NodeIF;
 
@@ -13,7 +14,7 @@ public class Test {
 		node1.join();
 		outputCycle(node1);
 		
-		Node node2=new Node("node2");
+		ChordNode node2=new Node("node2");
 		node2.join(node1);
 		outputCycle(node1);
 //		
@@ -51,7 +52,7 @@ public class Test {
 		node2.showDatas();
 	}
 	
-	static void outputCycle(Node node){
+	static void outputCycle(ChordNode node){
 		System.out.println("current cycle");
 		for(String string:node.travelCircle()){
 			System.out.println(string);
