@@ -1,6 +1,7 @@
 package com.felix.chordtest;
 
 import com.felix.chord.Node;
+import com.felix.chord.NodeIF;
 
 public class Test {
 
@@ -16,19 +17,19 @@ public class Test {
 		node2.join(node1);
 		outputCycle(node1);
 //		
-		Node node3=new Node("node3");
+		NodeIF node3=new Node("node3");
 		node3.join(node1);
 		outputCycle(node1);
 		
-		Node node4=new Node("node4");
+		NodeIF node4=new Node("node4");
 		node4.join(node1);
 		outputCycle(node1);
 		
-		Node node5=new Node("node5");
+		NodeIF node5=new Node("node5");
 		node5.join(node1);
 		outputCycle(node1);
 		
-		Node node6=new Node("node6");
+		NodeIF node6=new Node("node6");
 		node6.join(node1);
 		outputCycle(node1);
 		
@@ -38,7 +39,7 @@ public class Test {
 		System.out.println("data added");
 		node2.showDatas();
 		for(int i=7;i<30;i++){
-			Node node=new Node("node"+i);
+			NodeIF node=new Node("node"+i);
 			node.join(node1);
 		}
 		
