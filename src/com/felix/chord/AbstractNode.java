@@ -28,4 +28,6 @@ public abstract class AbstractNode implements Node{
 		return info;
 	}
 
+	
+	
 }
